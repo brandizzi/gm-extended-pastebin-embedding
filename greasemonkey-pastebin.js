@@ -24,10 +24,12 @@
       ).then(
         t => {
           const content = codeBox.textContent + `<noscript><code>${t}</code></noscript>`;
+
           const textarea = document.createElement('textarea');
           textarea.textContent = content;
           textarea.cols = 120;
           textarea.style = 'height:auto;'
+
           var count = 0;
           for (var i = 0; i < content.length; i++) {
             if ((content[i] === '\n') || (content[i] === '\r')) {
@@ -35,20 +37,28 @@
             }
           }
           textarea.rows = count / 2 + 1;
+
           const button = document.createElement('button');
           button.textContent = 'Copy';
-          button.onclick = () => {
+          const buttonClickHandler = () => {
             textarea.select();
             document.execCommand("copy");
           };
+          button.onclick = buttonClickHandler;
+          const bottomButton = button.cloneNode(1);
+          bottomButton.onclick = buttonClickHandler;
+
           const div = document.createElement('div');
+          div.appendChild(button);
+          div.appendChild(document.createElement('br'));
           div.appendChild(textarea);
           div.appendChild(document.createElement('br'));
-          div.appendChild(button);
+          div.appendChild(bottomButton);
+
           codeBox.parentNode.insertBefore(div, codeBox.nextSibling);
           codeBox.parentNode.removeChild(codeBox);
         }
       );
     }
   );
-})();     
+})();
